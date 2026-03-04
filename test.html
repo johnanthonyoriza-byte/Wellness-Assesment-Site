@@ -133,14 +133,18 @@ function calculateWellness() {
     let weightedMean = weightedSum / totalWeight;
     let level = "";
 
-    if (weightedMean < 2.5) {
-        level = "Low Wellness – Get a Therapist NOW!";
+    if (weightedMean < 1.1) {
+        level = "Extremely Low Wellness – 'Help is available - 0919-057-1553'";
+	} else if (weightedMean < 1.5) {
+	    level = "Very Low Wellness – 'You should probably get a therapist'";
+	} else if (weightedMean < 2.5) {
+	    level = "Low Wellness – 'Still got problems";
     } else if (weightedMean < 3.5) {
-        level = "Moderate Wellness – Still got problems";
+        level = "Moderate Wellness – 'Still need some improvements'";
     } else if (weightedMean < 4.5) {
-        level = "Good Wellness – You're Healty";
+        level = "Good Wellness – 'Healthy'";
     } else {
-        level = "Excellent Wellness – Perfectly Healthy";
+        level = "Excellent Wellness – 'Perfectly Healthy'";
     }
 
     document.getElementById("result").innerText =
