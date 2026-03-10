@@ -2,18 +2,17 @@
 <html>
 <meta charset="UTF-8">
 <head>
-    <title>Personal Wellness Assessment</title>
-    <style>
+<title>Personal Wellness Assessment</title>
+
+<style>
 
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 40px;
-
     background: linear-gradient(-45deg, #EBFFFB, #94FFF0, #3DB8FF);
     background-size: 400% 400%;
     animation: gradientBG 10s ease infinite;
-    overflow-x: hidden;
 }
 
 body::before{
@@ -36,167 +35,215 @@ body::before{
     pointer-events:none;
 }
 
-
 @keyframes gradientBG{
-    0%{background-position:0% 50%;}
-    50%{background-position:100% 50%;}
-    100%{background-position:0% 50%;}
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
 }
 
-
 @keyframes moveStripes{
-    from{
-        transform:translateX(0) translateY(0);
-    }
-    to{
-        transform:translateX(-200px) translateY(-200px);
-    }
+from{transform:translateX(0) translateY(0);}
+to{transform:translateX(-200px) translateY(-200px);}
 }
 
 .container{
-    max-width:400px;
-    margin:auto;
-
-    backdrop-filter: blur(10px);
-    background: rgba(255,255,255,0.85);
-
-    padding:30px;
-    border-radius:15px;
-
-    box-shadow:0 15px 30px rgba(0,0,0,0.15);
+max-width:420px;
+margin:auto;
+backdrop-filter: blur(10px);
+background: rgba(255,255,255,0.9);
+padding:30px;
+border-radius:15px;
+box-shadow:0 15px 30px rgba(0,0,0,0.15);
 }
 
-h2{
-    text-align:center;
-    margin-bottom:20px;
-}
+h2{text-align:center;}
 
-.question{
-    margin-bottom:15px;
-}
+.question{margin-bottom:15px;}
 
 select{
-    width:100%;
-    padding:8px;
-    margin-top:5px;
-    border-radius:5px;
-    border:1px solid #ccc;
+width:100%;
+padding:8px;
+margin-top:5px;
+border-radius:5px;
+border:1px solid #ccc;
 }
 
 button{
-    margin-top:20px;
-    padding:10px 20px;
-
-    background:linear-gradient(#47CEFF,#3DB8FF);
-    color:white;
-
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-
-    transition:all 0.3s ease;
+margin-top:20px;
+padding:10px 20px;
+background:linear-gradient(#47CEFF,#3DB8FF);
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
+transition:all 0.3s ease;
 }
 
 button:hover{
-    transform:translateY(-2px) scale(1.03);
-    box-shadow:0 6px 12px rgba(0,255,255,0.6);
+transform:translateY(-2px) scale(1.03);
+box-shadow:0 6px 12px rgba(0,255,255,0.6);
 }
 
 .result{
-    margin-top:25px;
-    font-weight:bold;
-    font-size:18px;
-    text-align:center;
+margin-top:20px;
+font-weight:bold;
+font-size:18px;
+text-align:center;
+}
+
+/* progress bar */
+
+.meter{
+width:100%;
+height:20px;
+background:#eee;
+border-radius:10px;
+margin-top:15px;
+overflow:hidden;
+}
+
+#bar{
+height:100%;
+width:0%;
+background:#3DB8FF;
+transition:width 1s ease;
+border-radius:10px;
+}
+
+.advice{
+margin-top:15px;
+font-size:14px;
+text-align:center;
 }
 
 </style>
 </head>
+
 <body>
 
 <div class="container">
-    <h2>Personal Wellness Assessment</h2>
-    <p>Rate each statement from 1 (Strongly Disagree) to 5 (Strongly Agree).</p>
 
-    <div id="questions"></div>
+<h2>Personal Wellness Assessment</h2>
+<p>Rate each statement from 1 (Strongly Disagree) to 5 (Strongly Agree).</p>
 
-    <button onclick="calculateWellness()">Calculate Wellness Score</button>
+<div id="questions"></div>
 
-    <div class="result" id="result"></div>
+<button onclick="calculateWellness()">Calculate Wellness Score</button>
+
+<div class="result" id="result"></div>
+
+<div class="meter">
+<div id="bar"></div>
+</div>
+
+<div class="advice" id="advice"></div>
+
+<button onclick="location.reload()">Retake Assessment</button>
+
 </div>
 
 <script>
+
 const questions = [
-    { text: "1. I get at least 7-8 hours of quality sleep most nights.", weight: 2 },
-    { text: "2. I engage in physical activity at least 3 times per week.", weight: 2 },
-    { text: "3. I maintain a balanced and nutritious diet.", weight: 2 },
-    { text: "4. I feel emotionally stable and able to manage stress effectively.", weight: 3 },
-    { text: "5. I have supportive relationships in my life.", weight: 2 },
-    { text: "6. I feel motivated and purposeful in my daily activities.", weight: 3 },
-    { text: "7. I limit excessive screen time and digital distractions.", weight: 1 },
-    { text: "8. I take time for relaxation or self-care regularly.", weight: 2 },
-    { text: "9. I feel confident about my current life direction.", weight: 3 },
-    { text: "10.I rarely feel overwhelmed by responsibilities.", weight: 2 }
+{ text: "1. I get at least 7-8 hours of quality sleep most nights.", weight: 2 },
+{ text: "2. I engage in physical activity at least 3 times per week.", weight: 2 },
+{ text: "3. I maintain a balanced and nutritious diet.", weight: 2 },
+{ text: "4. I feel emotionally stable and able to manage stress effectively.", weight: 3 },
+{ text: "5. I have supportive relationships in my life.", weight: 2 },
+{ text: "6. I feel motivated and purposeful in my daily activities.", weight: 3 },
+{ text: "7. I limit excessive screen time and digital distractions.", weight: 1 },
+{ text: "8. I take time for relaxation or self-care regularly.", weight: 2 },
+{ text: "9. I feel confident about my current life direction.", weight: 3 },
+{ text: "10. I rarely feel overwhelmed by responsibilities.", weight: 2 }
 ];
 
 const container = document.getElementById("questions");
 
-// Generate Questions
-questions.forEach((q, index) => {
-    container.innerHTML += `
-        <div class="question">
-            <label>${q.text}</label>
-            <select id="q${index}">
-                <option value="">Select</option>
-                <option value="1">1 - Strongly Disagree</option>
-                <option value="2">2 - Disagree</option>
-                <option value="3">3 - Neutral</option>
-                <option value="4">4 - Agree</option>
-                <option value="5">5 - Strongly Agree</option>
-            </select>
-        </div>
-    `;
+questions.forEach((q,index)=>{
+container.innerHTML += `
+<div class="question">
+<label>${q.text}</label>
+<select id="q${index}">
+<option value="">Select</option>
+<option value="1">1 - Strongly Disagree</option>
+<option value="2">2 - Disagree</option>
+<option value="3">3 - Neutral</option>
+<option value="4">4 - Agree</option>
+<option value="5">5 - Strongly Agree</option>
+</select>
+</div>
+`;
 });
 
-function calculateWellness() {
-    let weightedSum = 0;
-    let totalWeight = 0;
+function calculateWellness(){
 
-    for (let i = 0; i < questions.length; i++) {
-        let value = parseFloat(document.getElementById("q" + i).value);
+let weightedSum=0;
+let totalWeight=0;
 
-        if (!value) {
-            document.getElementById("result").innerText =
-                "Please answer all questions before calculating your wellness score.";
-            return;
-        }
+for(let i=0;i<questions.length;i++){
 
-        weightedSum += value * questions[i].weight;
-        totalWeight += questions[i].weight;
-    }
+let value=parseFloat(document.getElementById("q"+i).value);
 
-    let weightedMean = weightedSum / totalWeight;
-    let level = "";
-
-if (weightedMean < 1.67) {
-    level = "Extremely Low Wellness – 'Severe emotional difficulty'";
-} else if (weightedMean < 2.33) {
-    level = "Very Low Wellness – 'Needs significant improvement'";
-} else if (weightedMean < 3.00) {
-    level = "Low Wellness – 'Below average emotional well-being'";
-} else if (weightedMean < 3.67) {
-    level = "Moderate Wellness – 'Average but could improve'";
-} else if (weightedMean < 4.33) {
-    level = "Good Wellness – 'Healthy emotional state'";
-} else {
-    level = "Excellent Wellness – 'Very strong emotional well-being'";
+if(!value){
+document.getElementById("result").innerText="Please answer all questions before calculating your score.";
+return;
 }
 
-    document.getElementById("result").innerText =
-        "Weighted Mean: " + weightedMean.toFixed(2) + " | " + level;
+weightedSum+=value*questions[i].weight;
+totalWeight+=questions[i].weight;
+
 }
+
+let weightedMean=weightedSum/totalWeight;
+let level="";
+let advice="";
+let color="";
+
+if(weightedMean<1.67){
+level="Extremely Low Wellness";
+color="#ff4d4d";
+advice="Your wellness level is very low. Consider improving sleep, exercise, and seeking emotional support.";
+}
+else if(weightedMean<2.33){
+level="Very Low Wellness";
+color="#ff6b6b";
+advice="Your wellness may need attention. Small lifestyle improvements could help.";
+}
+else if(weightedMean<3.00){
+level="Low Wellness";
+color="#ffaa00";
+advice="Your wellness is below average. Try improving daily habits and stress management.";
+}
+else if(weightedMean<3.67){
+level="Moderate Wellness";
+color="#ffd166";
+advice="Your wellness is moderate. With some improvements you can achieve a healthier balance.";
+}
+else if(weightedMean<4.33){
+level="Good Wellness";
+color="#2ecc71";
+advice="You have a healthy wellness level. Continue maintaining balanced habits.";
+}
+else{
+level="Excellent Wellness";
+color="#1abc9c";
+advice="Your wellness level is very strong. Keep maintaining your healthy lifestyle.";
+}
+
+let resultBox=document.getElementById("result");
+
+resultBox.style.color=color;
+resultBox.innerHTML=
+"Weighted Mean: "+weightedMean.toFixed(2)+"<br>"+level;
+
+document.getElementById("advice").innerText=advice;
+
+let percent=(weightedMean/5)*100;
+document.getElementById("bar").style.width=percent+"%";
+
+}
+
 </script>
 
 </body>
 </html>
-
-
