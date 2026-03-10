@@ -133,19 +133,19 @@ function calculateWellness() {
     let weightedMean = weightedSum / totalWeight;
     let level = "";
 
-    if (weightedMean < 1.1) {
-        level = "Extremely Low Wellness – 'Help is available - 0919-057-1553'";
-	} else if (weightedMean < 1.5) {
-	    level = "Very Low Wellness – 'You should probably get a therapist'";
-	} else if (weightedMean < 2.5) {
-	    level = "Low Wellness – 'Still got problems";
-    } else if (weightedMean < 3.5) {
-        level = "Moderate Wellness – 'Still need some improvements'";
-    } else if (weightedMean < 4.5) {
-        level = "Good Wellness – 'Healthy'";
-    } else {
-        level = "Excellent Wellness – 'Perfectly Healthy'";
-    }
+if (weightedMean < 1.67) {
+    level = "Extremely Low Wellness – 'Severe emotional difficulty'";
+} else if (weightedMean < 2.33) {
+    level = "Very Low Wellness – 'Needs significant improvement'";
+} else if (weightedMean < 3.00) {
+    level = "Low Wellness – 'Below average emotional well-being'";
+} else if (weightedMean < 3.67) {
+    level = "Moderate Wellness – 'Average but could improve'";
+} else if (weightedMean < 4.33) {
+    level = "Good Wellness – 'Healthy emotional state'";
+} else {
+    level = "Excellent Wellness – 'Very strong emotional well-being'";
+}
 
     document.getElementById("result").innerText =
         "Weighted Mean: " + weightedMean.toFixed(2) + " | " + level;
@@ -154,3 +154,4 @@ function calculateWellness() {
 
 </body>
 </html>
+
