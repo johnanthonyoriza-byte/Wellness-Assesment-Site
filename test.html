@@ -4,68 +4,112 @@
 <head>
     <title>Personal Wellness Assessment</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(-45deg, #EBFFFB, #94FFF0, #3DB8FF);
-			background-size: 400% 400%;
-            padding: 40px;
-			animation: gradientBG 10s ease infinite;
-        }
-		
-		@keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
 
-        .container {
-            max-width: 400px;
-            margin: auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 40px;
 
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+    background: linear-gradient(-45deg, #EBFFFB, #94FFF0, #3DB8FF);
+    background-size: 400% 400%;
+    animation: gradientBG 10s ease infinite;
+    overflow-x: hidden;
+}
 
-        .question {
-            margin-bottom: 15px;
-        }
+body::before{
+    content:"";
+    position:fixed;
+    top:-100%;
+    left:-100%;
+    width:300%;
+    height:300%;
 
-        select {
-            width: 100%;
-            padding: 6px;
-            margin-top: 5px;
-        }
+    background: repeating-linear-gradient(
+        45deg,
+        rgba(255,255,255,0.08) 0px,
+        rgba(255,255,255,0.08) 20px,
+        transparent 20px,
+        transparent 40px
+    );
 
-        button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: linear-gradient(#47CEFF, #3DB8FF);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-			transition: all 0.3s ease;
-        }
+    animation: moveStripes 10s linear infinite;
+    pointer-events:none;
+}
 
-        button:hover {
-		    transform: translateY(-1px) scale(1.02);
-			box-shadow: 0 5px 10px rgba(0, 255, 255, 0.6)
-           
-        }
 
-        .result {
-            margin-top: 25px;
-            font-weight: bold;
-            font-size: 18px;
-            text-align: center;
-        }
-    </style>
+@keyframes gradientBG{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+
+@keyframes moveStripes{
+    from{
+        transform:translateX(0) translateY(0);
+    }
+    to{
+        transform:translateX(-200px) translateY(-200px);
+    }
+}
+
+.container{
+    max-width:400px;
+    margin:auto;
+
+    backdrop-filter: blur(10px);
+    background: rgba(255,255,255,0.85);
+
+    padding:30px;
+    border-radius:15px;
+
+    box-shadow:0 15px 30px rgba(0,0,0,0.15);
+}
+
+h2{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.question{
+    margin-bottom:15px;
+}
+
+select{
+    width:100%;
+    padding:8px;
+    margin-top:5px;
+    border-radius:5px;
+    border:1px solid #ccc;
+}
+
+button{
+    margin-top:20px;
+    padding:10px 20px;
+
+    background:linear-gradient(#47CEFF,#3DB8FF);
+    color:white;
+
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+
+    transition:all 0.3s ease;
+}
+
+button:hover{
+    transform:translateY(-2px) scale(1.03);
+    box-shadow:0 6px 12px rgba(0,255,255,0.6);
+}
+
+.result{
+    margin-top:25px;
+    font-weight:bold;
+    font-size:18px;
+    text-align:center;
+}
+
+</style>
 </head>
 <body>
 
@@ -122,7 +166,7 @@ function calculateWellness() {
 
         if (!value) {
             document.getElementById("result").innerText =
-                "You failed to answer all  the questions, how dumb can you be? Maybe an IQ test would be more fitting for you.";
+                "Please answer all questions before calculating your wellness score.";
             return;
         }
 
@@ -154,4 +198,5 @@ if (weightedMean < 1.67) {
 
 </body>
 </html>
+
 
